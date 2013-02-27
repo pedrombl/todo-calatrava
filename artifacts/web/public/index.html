@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <script src='scripts/zepto.js' type='text/javascript'></script>
+    <script src='scripts/ICanHaz.js' type='text/javascript'></script>
+    <script src='scripts/underscore.js' type='text/javascript'></script>
+    <script src='scripts/bridge.js' type='text/javascript'></script>
+    <script src='scripts/init.js' type='text/javascript'></script>
+    <script src='scripts/calatrava.js' type='text/javascript'></script>
+    <script src='scripts/alert.web.js' type='text/javascript'></script>
+    <script src='scripts/env.js' type='text/javascript'></script>
+    <script src='scripts/shell.js' type='text/javascript'></script>
+    <script src='scripts/shell.js' type='text/javascript'></script>
+    <script src='scripts/page.todoForm.js' type='text/javascript'></script>
+    <script src='scripts/pageHelper.js' type='text/javascript'></script>
+    <script src='scripts/alert.js' type='text/javascript'></script>
+    <script src='scripts/controller.todo.js' type='text/javascript'></script>
+    <script src='scripts/init.todo.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <div class='container' id='app_container'>
+      <div class='page' id='todoForm'>
+        <h3>A ToDo List</h3>
+        <div id='todos'></div>
+        <input id='todo_input' />
+        <button id='add_todo'>Add</button>
+        <span id='todo_output'></span>
+      </div>
+    </div>
+  </body>
+  <script type='text/javascript'>
+    //<![CDATA[
+      $(document).ready(function(){
+        example.todo.start();      
+      });
+    //]]>
+  </script>
+</html>
