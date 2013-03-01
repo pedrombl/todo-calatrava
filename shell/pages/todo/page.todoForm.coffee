@@ -40,7 +40,6 @@ calatrava.pageView.todoForm = ->
 	bind: (event, handler) ->
 		console.log "event: ", event
 		if event == 'add_todo'
-			console.log "add todo handler"
 			$p("#" + event).off('click').on 'click', handler
 		else
 			$p("#" + event).off('change').on 'change', handler
@@ -52,9 +51,7 @@ calatrava.pageView.todoForm = ->
 	get: (field) ->
 		console.log('getting...', field)
 		if field.match(/todo_checkbox/)
-			checked = $page.find("#" + field).prop('checked')
-			console.log "checked? ", checked
-			checked
+			$page.find("#" + field).prop('checked')
 		else
 			$page.find("#" + field).val()
 

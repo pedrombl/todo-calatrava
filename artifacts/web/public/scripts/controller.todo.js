@@ -5,47 +5,56 @@
   if (example.todo == null) example.todo = {};
 
   example.todo.controller = function(_arg) {
-    var addTodo, addTodoToArray, ajax, changePage, count, todoDone, todos, views;
+    var addTaskToArray, addTodo, ajax, changePage, changeTaskAppearance, count, renderNewTask, taskDone, taskHandler, tasks, views;
     views = _arg.views, changePage = _arg.changePage, ajax = _arg.ajax;
-    todos = [];
+    tasks = [];
     count = 0;
-    addTodoToArray = function(todoInput) {
-      todos[count] = todoInput;
+    addTaskToArray = function(taskText) {
+      tasks[count] = taskText;
       calatrava.bridge.log("adding todo with input " + count);
-      calatrava.bridge.log("todos array: " + todos);
+      calatrava.bridge.log("tasks array: " + tasks);
       return count++;
     };
-    todoDone = function(id) {
+    renderNewTask = function(taskText, id) {
+      return views.todoForm.render({
+        todo_outputs: {
+          content: taskText,
+          id: id
+        }
+      });
+    };
+    taskDone = function(id) {
       return calatrava.bridge.log("done " + id);
     };
-    addTodo = function() {
-      return views.todoForm.get('todo_input', function(todoInput) {
-        var id;
-        id = addTodoToArray(todoInput);
-        calatrava.bridge.log("todo id added: " + id);
-        views.todoForm.render({
-          todo_outputs: {
-            content: todoInput,
+    changeTaskAppearance = function(id, checkBox) {
+      if (checkBox === "true") {
+        return views.todoForm.render({
+          disable_task: {
             id: id
           }
         });
+      } else {
+        return views.todoForm.render({
+          enable_task: {
+            id: id
+          }
+        });
+      }
+    };
+    taskHandler = function(id) {
+      taskDone(id);
+      return views.todoForm.get('todo_checkbox' + id, function(checkBox) {
+        return changeTaskAppearance(id, checkBox);
+      });
+    };
+    addTodo = function() {
+      return views.todoForm.get('todo_input', function(taskText) {
+        var id;
+        id = addTaskToArray(taskText);
+        calatrava.bridge.log("todo id added: " + id);
+        renderNewTask(taskText, id);
         return views.todoForm.bind('todo_checkbox' + id, function() {
-          todoDone(id);
-          return views.todoForm.get('todo_checkbox' + id, function(checkBox) {
-            if (checkBox === "true") {
-              return views.todoForm.render({
-                disable_task: {
-                  id: id
-                }
-              });
-            } else {
-              return views.todoForm.render({
-                enable_task: {
-                  id: id
-                }
-              });
-            }
-          });
+          return taskHandler(id);
         });
       });
     };
