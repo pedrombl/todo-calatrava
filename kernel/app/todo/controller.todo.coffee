@@ -8,13 +8,13 @@ example.todo.controller = ({views, changePage, ajax}) ->
 
 	addTaskToArray = (taskText) ->
 		tasks[count] = taskText
-		calatrava.bridge.log "adding todo with input " + count
+		calatrava.bridge.log "adding task with input " + count
 		calatrava.bridge.log "tasks array: " + tasks
 		count++
 
 	renderNewTask = (taskText, id) ->
 		views.todoForm.render
-			todo_outputs: {
+			new_task: {
 				content: taskText,
 				id: id
 			}
@@ -36,16 +36,14 @@ example.todo.controller = ({views, changePage, ajax}) ->
 
 	taskHandler = (id) ->
 		taskDone(id)
-		views.todoForm.get 'todo_checkbox' + id, (checkBox) ->
+		views.todoForm.get 'task_checkbox_' + id, (checkBox) ->
 			changeTaskAppearance(id, checkBox)
 
-	addTodo = ->
-		views.todoForm.get 'todo_input', (taskText) ->
+	addTask = ->
+		views.todoForm.get 'task_input', (taskText) ->
 			id = addTaskToArray(taskText)
 			calatrava.bridge.log "todo id added: " + id
 			renderNewTask(taskText, id)
-			views.todoForm.bind 'todo_checkbox' + id, () -> taskHandler(id)
+			views.todoForm.bind 'task_checkbox_' + id, () -> taskHandler(id)
 					
-
-
-	views.todoForm.bind 'add_todo', addTodo
+	views.todoForm.bind 'add_task', addTask

@@ -11,13 +11,13 @@
     count = 0;
     addTaskToArray = function(taskText) {
       tasks[count] = taskText;
-      calatrava.bridge.log("adding todo with input " + count);
+      calatrava.bridge.log("adding task with input " + count);
       calatrava.bridge.log("tasks array: " + tasks);
       return count++;
     };
     renderNewTask = function(taskText, id) {
       return views.todoForm.render({
-        todo_outputs: {
+        new_task: {
           content: taskText,
           id: id
         }
@@ -43,22 +43,22 @@
     };
     taskHandler = function(id) {
       taskDone(id);
-      return views.todoForm.get('todo_checkbox' + id, function(checkBox) {
+      return views.todoForm.get('task_checkbox_' + id, function(checkBox) {
         return changeTaskAppearance(id, checkBox);
       });
     };
     addTodo = function() {
-      return views.todoForm.get('todo_input', function(taskText) {
+      return views.todoForm.get('task_input', function(taskText) {
         var id;
         id = addTaskToArray(taskText);
         calatrava.bridge.log("todo id added: " + id);
         renderNewTask(taskText, id);
-        return views.todoForm.bind('todo_checkbox' + id, function() {
+        return views.todoForm.bind('task_checkbox_' + id, function() {
           return taskHandler(id);
         });
       });
     };
-    return views.todoForm.bind('add_todo', addTodo);
+    return views.todoForm.bind('add_task', addTodo);
   };
 
 }).call(this);

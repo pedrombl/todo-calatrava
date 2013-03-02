@@ -5,41 +5,41 @@ calatrava.pageView.todoForm = ->
 	$page = $('#todoForm')
 	$p = (sel)-> $(sel, $page)
 
-	todoOutputElement = (data) ->
-		div_new_todo = document.createElement 'div'
-		div_new_todo.id = "todo_" + data.id
+	taskElement = (task) ->
+		new_task_div = document.createElement 'div'
+		new_task_div.id = "task_" + task.id
 
-		new_todo = document.createElement 'span'
-		new_todo.textContent = data.content
-		div_new_todo.appendChild(new_todo)
+		new_task_text = document.createElement 'span'
+		new_task_text.textContent = task.content
+		new_task_div.appendChild(new_task_text)
 
-		checkbox_new_todo = document.createElement 'input'
-		checkbox_new_todo.type = "checkbox"
-		checkbox_new_todo.id = "todo_checkbox" + data.id
-		div_new_todo.appendChild(checkbox_new_todo)
-		div_new_todo
+		new_task_checkbox = document.createElement 'input'
+		new_task_checkbox.type = "checkbox"
+		new_task_checkbox.id = "task_checkbox_" + task.id
+		new_task_div.appendChild(new_task_checkbox)
+		new_task_div
 		
 
-	addTodoOutput = (data) ->
-		$p("#todo_outputs").append todoOutputElement(data)
+	addTask = (data) ->
+		$p("#tasks").append taskElement(data)
 
 	disableTask = (data) ->
-		$p("#todo_" + data.id).css("text-decoration", "line-through")
+		$p("#task_" + data.id).css("text-decoration", "line-through")
 
 	enableTask = (data) ->
-		$p("#todo_" + data.id).css("text-decoration", "none")
+		$p("#task_" + data.id).css("text-decoration", "none")
 
 	renderSection = (key, data)->
 		console.log('rendering section ', key)
 		console.log('rendering data ', data)
 		switch key
-			when 'todo_outputs' then addTodoOutput data
+			when 'new_task' then addTask data
 			when 'disable_task' then disableTask data
 			when 'enable_task' then enableTask data
 	
 	bind: (event, handler) ->
 		console.log "event: ", event
-		if event == 'add_todo'
+		if event == 'add_task'
 			$p("#" + event).off('click').on 'click', handler
 		else
 			$p("#" + event).off('change').on 'change', handler
@@ -50,7 +50,7 @@ calatrava.pageView.todoForm = ->
 
 	get: (field) ->
 		console.log('getting...', field)
-		if field.match(/todo_checkbox/)
+		if field.match(/task_checkbox_/)
 			$page.find("#" + field).prop('checked')
 		else
 			$page.find("#" + field).val()
