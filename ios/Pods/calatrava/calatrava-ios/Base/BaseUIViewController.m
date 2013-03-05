@@ -25,6 +25,7 @@
   if (proxyId) {
     [[TWBridgePageRegistry sharedRegistry] dispatchEvent:event fromProxy:proxyId withArgs:args];
   }
+
   return self;
 }
 

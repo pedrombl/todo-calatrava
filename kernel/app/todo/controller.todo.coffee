@@ -40,6 +40,7 @@ example.todo.controller = ({views, changePage, ajax}) ->
 			changeTaskAppearance(id, checkBox)
 
 	addTask = ->
+		calatrava.bridge.log "running addTask"
 		views.todoForm.get 'task_input', (taskText) ->
 			id = addTaskToArray(taskText)
 			calatrava.bridge.log "todo id added: " + id
