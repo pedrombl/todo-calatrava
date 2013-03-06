@@ -8,9 +8,12 @@
 
 #import "BaseUIViewController.h"
 
-@interface TodoFormViewController : BaseUIViewController
+@interface TodoFormViewController : BaseUIViewController<UITableViewDelegate, UITableViewDataSource> {
+    IBOutlet UITableView *tasksTable;
+}
 
 @property (retain, nonatomic) IBOutlet UITextField *taskInput;
+@property (retain, nonatomic) UITableView *tasksTable;
 
 
 - (void)render:(NSDictionary *)jsViewObject;
