@@ -9,7 +9,7 @@
 #import "TodoFormViewController.h"
 
 @interface TodoFormViewController () {
-    NSMutableArray *tasks;
+    NSMutableDictionary *tasks;
 }
 
 @end
@@ -22,7 +22,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        tasks = [[NSMutableArray alloc] init];
+        tasks = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -49,7 +49,7 @@
 }
 
 - (void)render:(NSDictionary *)jsViewObject {
-    [tasks addObject: jsViewObject[@"new_task"][@"content"]];
+    [tasks setValue:jsViewObject[@"new_task"][@"content"] forKey:jsViewObject[@"new_task"][@"id"]];
     [tasksTable reloadData];
 }
 
@@ -75,17 +75,18 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     NSLog(@" end cellForRowAtIndexPath %d", indexPath.row);
-    cell.textLabel.text = tasks[indexPath.row];
+    
+    NSArray *tasksValue = [tasks allValues];
+    cell.textLabel.text = tasksValue[indexPath.row];
     return cell;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"didSelectRowAtIndexPath");
-    NSString *alertString = [NSString stringWithFormat:@"Clicked on row #%d", [indexPath row]];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:alertString message:@"" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [tasks removeObjectForKey:[tasks allKeysForObject:cell.textLabel.text][0]];
+    [tasksTable reloadData];
 }
 
 
