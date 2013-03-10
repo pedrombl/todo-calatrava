@@ -51,12 +51,22 @@
 }
 
 - (void)render:(NSDictionary *)jsViewObject {
-    [tasks setValue:jsViewObject[@"new_task"][@"content"] forKey:jsViewObject[@"new_task"][@"id"]];
+    if (jsViewObject[@"new_task"] != nil) {
+        [tasks setValue:jsViewObject[@"new_task"][@"content"] forKey:jsViewObject[@"new_task"][@"id"]];
+    }
+    else {
+        [tasks removeObjectForKey:jsViewObject[@"disable_task"][@"id"]];
+    }
     [tasksTable reloadData];
 }
 
 - (id)valueForField:(NSString *)field {
-    return self.taskInput.text;
+    if ([field isEqualToString:@"task_input"]) {
+        return self.taskInput.text;
+    }
+    else {
+        return @"true";
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -96,17 +106,22 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"didSelectRowAtIndexPath");
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    NSString *task_content = [cell.textLabel.text copy];
-    NSString *task_id = [tasks allKeysForObject:task_content][0];
-    [tasks removeObjectForKey:task_id];
-    [tasksTable reloadData];
+    NSString *taskContent = [cell.textLabel.text copy];
+    NSMutableDictionary *tasksDictionary = [self getDictionaryForSection:indexPath.section];
+    NSString *taskId = [tasksDictionary allKeysForObject:taskContent][0];
+    [self dispatchEvent:[NSString stringWithFormat:@"task_checkbox_%@", taskId] withArgs:@[]];
+    //[tasksTable reloadData];
 }
 
 - (NSArray *)getArrayForSection:(NSInteger)section {
+    return [[self getDictionaryForSection:section] allValues];
+}
+
+- (NSMutableDictionary *)getDictionaryForSection:(NSInteger)section {
     if(section == 0)
-        return [tasks allValues];
+        return tasks;
     else
-        return [tasks_done allValues];
+        return tasks_done;
 }
 
 
