@@ -52,10 +52,22 @@
 
 - (void)render:(NSDictionary *)jsViewObject {
     if (jsViewObject[@"new_task"] != nil) {
-        [tasks setValue:jsViewObject[@"new_task"][@"content"] forKey:jsViewObject[@"new_task"][@"id"]];
+        NSString *taskValue = [jsViewObject[@"new_task"][@"content"] copy];
+        NSString *taskId = [jsViewObject[@"new_task"][@"id"] description];
+        [tasks setValue: taskValue forKey:taskId];
     }
     else {
-        [tasks removeObjectForKey:jsViewObject[@"disable_task"][@"id"]];
+        if (jsViewObject[@"disable_task"][@"id"] != nil) {
+            NSString *taskContent = tasks[[jsViewObject[@"disable_task"][@"id"] description]];
+            [tasks removeObjectForKey:[jsViewObject[@"disable_task"][@"id"] description]];
+            [tasks_done setValue:taskContent forKey:[jsViewObject[@"disable_task"][@"id"] description]];
+        }
+        else {
+            NSString *taskContent = tasks_done[[jsViewObject[@"enable_task"][@"id"] description]];
+            [tasks_done removeObjectForKey:[jsViewObject[@"enable_task"][@"id"] description]];
+            [tasks setValue:taskContent forKey:[jsViewObject[@"enable_task"][@"id"] description]];
+        }
+        
     }
     [tasksTable reloadData];
 }
@@ -65,7 +77,13 @@
         return self.taskInput.text;
     }
     else {
-        return @"true";
+        NSString *taskId = [field substringFromIndex:14];
+        if (tasks[taskId] != nil) {
+            return @"true";
+        }
+        else {
+            return @"false";
+        }
     }
 }
 
