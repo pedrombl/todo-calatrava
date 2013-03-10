@@ -58,18 +58,20 @@
     }
     else {
         if (jsViewObject[@"disable_task"][@"id"] != nil) {
-            NSString *taskContent = tasks[[jsViewObject[@"disable_task"][@"id"] description]];
-            [tasks removeObjectForKey:[jsViewObject[@"disable_task"][@"id"] description]];
-            [tasks_done setValue:taskContent forKey:[jsViewObject[@"disable_task"][@"id"] description]];
+            [self move:[jsViewObject[@"disable_task"][@"id"] description] from:tasks to:tasks_done];
         }
         else {
-            NSString *taskContent = tasks_done[[jsViewObject[@"enable_task"][@"id"] description]];
-            [tasks_done removeObjectForKey:[jsViewObject[@"enable_task"][@"id"] description]];
-            [tasks setValue:taskContent forKey:[jsViewObject[@"enable_task"][@"id"] description]];
+            [self move:[jsViewObject[@"enable_task"][@"id"] description] from:tasks_done to:tasks];
         }
         
     }
     [tasksTable reloadData];
+}
+
+- (void)move:(NSString *)taskId from:(NSMutableDictionary *)tasksFrom to:(NSMutableDictionary *)tasksTo {
+    NSString *taskContent = tasksFrom[taskId];
+    [tasksFrom removeObjectForKey:taskId];
+    [tasksTo setValue:taskContent forKey:taskId];
 }
 
 - (id)valueForField:(NSString *)field {
